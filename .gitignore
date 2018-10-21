@@ -1,0 +1,10 @@
+# Caches and co.
+/.bash*
+/.vim*
+/.cache*
+/.composer
+/.config*
+/.yarn*
+/.v8flags*
+/apps/sylius/*
+/.babel.json
