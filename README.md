@@ -11,3 +11,8 @@ make coffee
 ```
 
 Enjoy ☕️
+
+You'll find :
+- Your website at `http://localhost`
+- Admin panel at `http://localhost/admin` (Login : sylius, Password: sylius)
+- Your mails at `http://localhost:1080`
