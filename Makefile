@@ -27,12 +27,14 @@ coffee: ## Launch it, and take coffee ☕️
 	${MAKE} infra-update
 	mkdir -p apps/sylius
 	${MAKE} composer-create-project
-	cp -Rv dist/dev/.* apps/sylius
+	${MAKE} apply-dist
 	${MAKE} SYMFONY_ENV=dev install
 install: up clean-cache theme-install sylius-install ## Install the project (⚠ Reset database)
 infra-update: ## Update the Docker infrastructure
 	${MAKE} PULL_FROM=1 pull build up
-
+apply-dist: ## Copy dist files
+	cp -Rv dist/dev/.env* apps/sylius
+	cp -Rv dist/dev/* apps/sylius
 
 include resources/makefiles/sylius.mk
 include resources/makefiles/composer.mk
