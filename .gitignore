@@ -6,5 +6,5 @@
 /.config*
 /.yarn*
 /.v8flags*
-/apps/sylius/*
+/apps/*
 /.babel.json
