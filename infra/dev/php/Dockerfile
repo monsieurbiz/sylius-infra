@@ -32,3 +32,6 @@ RUN chmod a+x /usr/local/bin/console
 # Use www-data user
 ARG USER_UID=1000
 RUN usermod -u $USER_UID www-data
+
+# Add some custom PHP config
+COPY files/php.ini /usr/local/etc/php/php.ini
