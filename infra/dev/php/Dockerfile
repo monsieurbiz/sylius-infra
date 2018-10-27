@@ -25,10 +25,6 @@ RUN apt-get update && \
 
 COPY files/vhost.conf /etc/apache2/sites-enabled/vhost.conf
 
-# Symfony binary
-COPY files/bin/console /usr/local/bin/console
-RUN chmod a+x /usr/local/bin/console
-
 # Use www-data user
 ARG USER_UID=1000
 RUN usermod -u $USER_UID www-data
