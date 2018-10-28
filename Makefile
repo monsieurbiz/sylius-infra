@@ -19,22 +19,25 @@ ifndef DC_PREFIX
 endif
 
 SYMFONY_ENV=dev
+SYLIUS_FOLDER=sylius
 
 ### PROJECT
 # ¯¯¯¯¯¯¯¯¯
 
 coffee: ## Launch it, and take coffee ☕️
 	${MAKE} infra-update
-	mkdir -p apps/sylius
+	mkdir -p apps/${SYLIUS_FOLDER}
 	${MAKE} composer-create-project
 	${MAKE} apply-dist
 	${MAKE} SYMFONY_ENV=dev install
+
 install: up clean-cache theme-install sylius-install ## Install the project (⚠ Reset database)
 infra-update: ## Update the Docker infrastructure
 	${MAKE} PULL_FROM=1 pull build up
 apply-dist: ## Copy dist files
-	cp -Rv dist/dev/.env* apps/sylius
-	cp -Rv dist/dev/* apps/sylius
+	mkdir -p apps/${SYLIUS_FOLDER}
+	cp -Rv dist/dev/.env* apps/${SYLIUS_FOLDER}
+	cp -Rv dist/dev/* apps/${SYLIUS_FOLDER}
 
 include resources/makefiles/sylius.mk
 include resources/makefiles/composer.mk

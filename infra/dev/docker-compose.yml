@@ -16,6 +16,7 @@ services:
       - mail
     ports:
       - "80:80"
+#      - "8080:8080"
 
   db:
     image: monsieurbiz/mariadb:10.1
