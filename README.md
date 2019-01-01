@@ -24,6 +24,25 @@ You'll find:
 - Admin panel at `http://localhost/admin` (Login : `sylius`, password: `sylius`).
 - Your mails at `http://localhost:1080`.
 
+## Setup with `docker-sync`
+
+### Install `docker-sync`
+
+https://github.com/EugenMayer/docker-sync/wiki/1.-Installation
+
+### Up containers
+
+`make up SYNC=1`
+
+### Down containers
+
+`make down SYNC=1`
+
+### Improvements ?
+
+On a fresh Sylius setup, you will see no differences. But when you add your custom bundles and plugins, the platform can be slow on Mac OS.
+To avoid that docker-sync help you to improve the speed of your customized Sylius platform.
+
 ## Change Sylius folder dir
 
 You can to change the target dir (`apps/sylius` by default):

@@ -4,6 +4,9 @@
 define docker-compose
 	cd ${DC_DIR} && docker-compose -p ${DC_PREFIX} $(1)
 endef
+define docker-sync
+	cd ${DC_DIR} && docker-sync $(1)
+endef
 
 pull: ## Pull the external images
 	$(call docker-compose,pull)
@@ -16,11 +19,25 @@ else
 	$(call docker-compose,build)
 endif
 
+up: SYNC=0
 up: ## Up the containers
+ifeq ($(SYNC),1)
+	docker volume create --name=sylius_sync
+	$(call docker-compose,-f docker-compose-sync.yml up -d)
+	$(call docker-sync,clean)
+	$(call docker-sync,start)
+else
 	$(call docker-compose,up -d)
+endif
 
+down: SYNC=0
 down: ## Down the containers (keep volumes)
+ifeq ($(SYNC),1)
 	$(call docker-compose,down)
+	$(call docker-sync,stop)
+else
+	$(call docker-compose,down)
+endif
 
 destroy: ## Destroy the containers, volumes, networks…
 	$(call docker-compose,down -v --remove-orphan)

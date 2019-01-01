@@ -8,3 +8,4 @@
 /.v8flags*
 /apps/*
 /.babel.json
+/infra/dev/.docker-sync*

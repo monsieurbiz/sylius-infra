@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  php:
+    build:
+      context: php
+      args:
+        USER_UID: ${USER_UID}
+    environment:
+      - SYLIUS_APP_DEV_PERMITTED=1
+    volumes:
+      - sylius_sync:/var/www:nocopy
+      - ../../apps/sylius/var:/var/www/apps/sylius/var:cached
+      - ../../apps/sylius/vendor:/var/www/apps/sylius/vendor:cached
+      - ../../apps/sylius/web/media:/var/www/apps/sylius/web/media:cached
+      - ~/.composer:/var/www/.composer:rw,cached
+    links:
+      - db
+      - mail
+    ports:
+      - "80:80"
+#      - "8080:8080"
+
+  db:
+    image: monsieurbiz/mariadb:10.1
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sylius
+    volumes:
+      - database:/var/lib/mysql:rw,cached
+    ports:
+      - "3306:3306"
+
+  node:
+    build:
+      context: node/
+      args:
+        USER_UID: ${USER_UID}
+    volumes:
+      - ../../:/var/www:rw,cached
+
+  mail:
+    image: monsieurbiz/mailcatcher
+    ports:
+      - "1080:1080"
+
+  blackfire:
+    image: blackfire/blackfire
+    environment:
+      - BLACKFIRE_SERVER_ID
+      - BLACKFIRE_SERVER_TOKEN
+
+volumes:
+  database: {}
+  sylius_sync:
+    external: true
