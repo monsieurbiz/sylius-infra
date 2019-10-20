@@ -1,23 +1,6 @@
 version: '3'
 
 services:
-  php:
-    build:
-      context: php
-      args:
-        USER_UID: ${USER_UID}
-    environment:
-      - SYLIUS_APP_DEV_PERMITTED=1
-    volumes:
-      - ../../:/var/www:cached
-      - ~/.composer:/var/www/.composer:rw,cached
-    links:
-      - db
-      - mail
-    ports:
-      - "80:80"
-#      - "8080:8080"
-
   db:
     image: monsieurbiz/mariadb:10.1
     environment:
