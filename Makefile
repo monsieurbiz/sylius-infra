@@ -4,44 +4,64 @@ SHELL=/bin/bash
 # Configuration
 # ¯¯¯¯¯¯¯¯¯¯¯¯¯
 
+SYLIUS_FOLDER=sylius
+PHP_VERSION=7.2
+DOMAINS=apps/${SYLIUS_FOLDER}:sylius-store
+SYLIUS_FIXTURES_SUITE=default
+
 BASH_CONTAINER=php
 export USER_UID=$(shell id -u)
 
-ifdef FORTRESS_HOST
-  DC_DIR=infra/fortress
-else
-  DC_DIR=infra/dev
-  DC_PREFIX=sylius
-endif
+DC_DIR=infra/dev
+DC_PREFIX=sylius
+APP_ENV=dev
 
 ifndef DC_PREFIX
   $(error Please define DC_PREFIX before running make)
 endif
 
-SYMFONY_ENV=dev
-SYLIUS_FOLDER=sylius
+
+### QUICK
+# ¯¯¯¯¯¯¯
+
+up start: docker.up symfony.server.start ## Up
+
+down: docker.down symfony.server.stop ## Down
+
+stop: docker.stop symfony.server.stop ## Stop
+
+logs: docker.logs symfony.server.log ## Logs
+
 
 ### PROJECT
 # ¯¯¯¯¯¯¯¯¯
 
 coffee: ## Launch it, and take coffee ☕️
-	${MAKE} infra-update
+	${MAKE} add-symfony-bin
+	${MAKE} project.infra.update
 	mkdir -p apps/${SYLIUS_FOLDER}
-	${MAKE} composer-create-project
+	rm -f .php-version
+	echo "${PHP_VERSION}" > .php-version
+	${MAKE} composer.create-project
+	mv .php-version  apps/${SYLIUS_FOLDER}/
 	${MAKE} apply-dist
-	${MAKE} SYMFONY_ENV=dev install
+	${MAKE} SYMFONY_ENV=dev project.install
 
-install: up clean-cache theme-install sylius-install ## Install the project (⚠ Reset database)
-infra-update: ## Update the Docker infrastructure
-	${MAKE} PULL_FROM=1 pull build up
+project.install: docker.up app.start composer.install sylius.install theme.assets.install theme.install ## Install the project (⚠ Reset database)
+project.infra.update: ## Update the Docker infrastructure
+	${MAKE} PULL_FROM=1 docker.pull docker.build docker.up
 apply-dist: ## Copy dist files
 	mkdir -p apps/${SYLIUS_FOLDER}
 	cp -Rv dist/dev/.env* apps/${SYLIUS_FOLDER}
 	cp -Rv dist/dev/* apps/${SYLIUS_FOLDER}
+add-symfony-bin: ## Download Symfony Binary
+	curl -sS https://get.symfony.com/cli/installer | bash
 
+include resources/makefiles/application.mk
+include resources/makefiles/symfony.mk
 include resources/makefiles/sylius.mk
+include resources/makefiles/theming.mk
 include resources/makefiles/composer.mk
 include resources/makefiles/test.mk
-include resources/makefiles/theming.mk
 include resources/makefiles/docker.mk
 include resources/makefiles/help.mk
