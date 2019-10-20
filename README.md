@@ -20,8 +20,8 @@ Enjoy ☕️
 
 You'll find:
 
-- Your website at `http://localhost`.
-- Admin panel at `http://localhost/admin` (Login : `sylius`, password: `sylius`).
+- Your website at `http://sylius-store.wip`.
+- Admin panel at `http://sylius-store.wip/admin` (Login : `sylius`, password: `sylius`).
 - Your mails at `http://localhost:1080`.
 
 ### Up containers
