@@ -13,6 +13,8 @@ rm -rf .git
 git init
 git add .
 git commit -m "Init project with Sylius infra"
+make add-symfony-bin
+sudo cp ${HOME}/.symfony/bin/symfony /usr/local/bin/
 make coffee
 ```
 
