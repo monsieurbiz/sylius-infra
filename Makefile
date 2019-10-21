@@ -37,7 +37,6 @@ logs: docker.logs symfony.server.log ## Logs
 # ¯¯¯¯¯¯¯¯¯
 
 coffee: ## Launch it, and take coffee ☕️
-	${MAKE} add-symfony-bin
 	${MAKE} project.infra.update
 	mkdir -p apps/${SYLIUS_FOLDER}
 	rm -f .php-version
