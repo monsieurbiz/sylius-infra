@@ -24,11 +24,11 @@ endif
 ### QUICK
 # ¯¯¯¯¯¯¯
 
-up start: docker.up symfony.server.start ## Up
+up start: docker.up symfony.proxy.start symfony.server.start ## Up
 
-down: docker.down symfony.server.stop ## Down
+down: docker.down symfony.proxy.stop symfony.server.stop ## Down
 
-stop: docker.stop symfony.server.stop ## Stop
+stop: docker.stop symfony.proxy.stop symfony.server.stop ## Stop
 
 logs: docker.logs symfony.server.log ## Logs
 
