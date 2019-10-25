@@ -1,5 +1,9 @@
 # Sylius Infra Project
 
+A Sylius infra using the Symfony binary.
+
+If you want to know more about the Symfony binary, you can this read this [fantastic article from Jolicode](https://jolicode.com/blog/my-local-server-with-the-symfony-binary)
+
 ## Help
 
 Use `make` or `make help` to get the list of available commands.

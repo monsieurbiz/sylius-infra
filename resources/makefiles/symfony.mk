@@ -41,6 +41,12 @@ ifneq (${SYMFONY_USE_DOCKER_ONLY},1)
 	done;
 endif
 
+symfony.proxy.start: ## Start Symfony proxy
+	@$(call symfony,local:proxy:start)
+
+symfony.proxy.stop: ## Stop Symfony proxy
+	@$(call symfony,local:proxy:stop)
+
 symfony.server.start: ## Serve the app
 ifneq (${SYMFONY_USE_DOCKER_ONLY},1)
 ifeq (${SYMFONY_NO_TLS},1)
