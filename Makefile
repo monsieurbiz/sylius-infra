@@ -41,8 +41,10 @@ coffee: ## Launch it, and take coffee ☕️
 	mkdir -p apps/${SYLIUS_FOLDER}
 	rm -f .php-version
 	echo "${PHP_VERSION}" > .php-version
+	echo "memory_limit=-1" > php.ini
 	${MAKE} composer.create-project
 	mv .php-version  apps/${SYLIUS_FOLDER}/
+	mv php.ini  apps/${SYLIUS_FOLDER}/
 	${MAKE} apply-dist
 	${MAKE} SYMFONY_ENV=dev project.install
 
