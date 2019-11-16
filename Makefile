@@ -5,7 +5,7 @@ SHELL=/bin/bash
 # ¯¯¯¯¯¯¯¯¯¯¯¯¯
 
 SYLIUS_FOLDER=sylius
-PHP_VERSION=7.2
+PHP_VERSION=7.3
 DOMAINS=apps/${SYLIUS_FOLDER}:sylius-store
 SYLIUS_FIXTURES_SUITE=default
 
