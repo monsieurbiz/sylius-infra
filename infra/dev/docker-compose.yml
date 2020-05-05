@@ -1,34 +1,79 @@
 version: '3'
 
 services:
-  db:
-    image: monsieurbiz/mariadb:10.2
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: sylius
-    volumes:
-      - database:/var/lib/mysql:rw,cached
-    ports:
-      - "3306:3306"
+    db:
+        image: monsieurbiz/mariadb:10.2
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: sylius
+        volumes:
+            - database:/var/lib/mysql:rw,cached
+        ports:
+            - "3306:3306"
 
-  node:
-    build:
-      context: node/
-      args:
-        USER_UID: ${USER_UID}
-    volumes:
-      - ../../:/var/www:rw,cached
+    node:
+        build:
+            context: node/
+            args:
+                USER_UID: ${USER_UID}
+        volumes:
+            - ../../:/var/www:rw,cached
 
-  mail:
-    image: monsieurbiz/mailcatcher
-    ports:
-      - "1080:1080"
+    mail:
+        image: monsieurbiz/mailcatcher
+        ports:
+            - "1080:1080"
 
-  blackfire:
-    image: blackfire/blackfire
-    environment:
-      - BLACKFIRE_SERVER_ID
-      - BLACKFIRE_SERVER_TOKEN
+    blackfire:
+        image: blackfire/blackfire
+        environment:
+            - BLACKFIRE_SERVER_ID
+            - BLACKFIRE_SERVER_TOKEN
+
+    elasticsearch:
+        build:
+            context: ./elasticsearch/
+            args:
+                USER_UID: ${USER_UID}
+        volumes:
+            - esdata:/usr/share/elasticsearch/data:rw
+        environment:
+            - node.name=elasticsearch
+            - cluster.initial_master_nodes=elasticsearch
+            - cluster.name=docker-cluster
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - "xpack.security.enabled=false"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+
+    cerebro:
+        image: lmenezes/cerebro
+        ports:
+            - "9000:9000"
+        links:
+            - elasticsearch
+
+    kibana:
+        image: kibana:7.4.0
+        ports:
+            - "5601:5601"
+        environment:
+            - "SERVER_NAME=localhost"
+            - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
+            - "XPACK_GRAPH_ENABLED=false"
+            - "XPACK_ML_ENABLED=false"
+            - "XPACK_REPORTING_ENABLED=false"
+            - "XPACK_SECURITY_ENABLED=false"
+            - "XPACK_WATCHER_ENABLED=false"
+        links:
+            - elasticsearch
 
 volumes:
-  database: {}
+    database: {}
+    esdata: {}
